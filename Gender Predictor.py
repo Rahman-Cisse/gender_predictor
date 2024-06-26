@@ -17,11 +17,13 @@ def predict_gender(Event=None):
             # Getting the input from entry
             entered_name = name_entry.get().strip()
             # Clear previous results
-            name_label.config(text='')
-            gender_label.config(text='')
-            probability_label.config(text='')
-            gender_image.config(image='')
-            bottom_image.config(image='')
+            def clear_labels():
+                name_label.config(text='')
+                gender_label.config(text='')
+                probability_label.config(text='')
+                gender_image.config(image='')
+                bottom_image.config(image='')
+            clear_labels()
             #validating
             if len(entered_name) < 2:
                 showerror(title='Error', message='Please enter a valid name.')
@@ -132,6 +134,8 @@ def show_history():
         def clear_full_history():
             if askyesno(title="Clear History", message="Are you sure you want to clear your history?"):
                 clear_history()
+                boolean()
+                notebook.select(predict_frame)
                 
         #clearing all history
         def clear_history():
