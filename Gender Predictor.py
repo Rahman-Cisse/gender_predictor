@@ -1,9 +1,11 @@
+import json
 from tkinter import *
 from tkinter import ttk
 import requests
 from tkinter.messagebox import showerror, askyesno
 from PIL import Image, ImageTk, ImageSequence
 import threading
+
 # List to store the history of predictions for the current session
 session_history = []
 is_running = False
@@ -48,10 +50,9 @@ def predict_gender(Event=None):
                 gender_image.config(image=female_image)
             
             # Adding to session history and writing to file
-            session_history.append((name, gender, probability))
-            with open('history.txt', 'a') as file:
-                file.write(f"{name},{gender},{probability}\n")
-                
+            session_history.append({"name": name, "gender": gender, "probability": probability})
+            with open('history.json', 'w') as file:
+                json.dump(session_history, file)
                 
             # Update the history listbox with the new entry
             update_history_listbox()
@@ -116,9 +117,12 @@ def show_history():
         def display_history():
             listboxa.delete(0, END)
             try:
-                with open('history.txt', 'r') as file:
-                    for line in file:
-                        name, gender, probability = line.strip().split(',')
+                with open('history.json', 'r') as file:
+                    history_data = json.load(file)
+                    for entry in history_data:
+                        name = entry['name']
+                        gender = entry['gender']
+                        probability = entry['probability']
                         listboxa.insert(END, f"Name: {name}, Gender: {gender}, Accuracy: {float(probability):.2f}%")
             except FileNotFoundError:
                 showerror(title='Error', message='No history file found.')
@@ -131,8 +135,8 @@ def show_history():
                 
         #clearing all history
         def clear_history():
-            with open("history.txt", "w") as file:
-                pass  # Empty the file content
+            with open("history.json", "w") as file:
+                json.dump([], file)  # Empty the file content
             display_history()
             
         display_history()
@@ -155,7 +159,10 @@ def show_history():
 # Function to update the history listbox in the history_frame with session history
 def update_history_listbox():
     listbox.delete(0, END)
-    for name, gender, probability in session_history:
+    for entry in session_history:
+        name = entry['name']
+        gender = entry['gender']
+        probability = entry['probability']
         listbox.insert(0, f"Name: {name}, Gender: {gender}, Accuracy: {probability:.2f}%")
         
 #function to show a message when exiting
@@ -187,11 +194,6 @@ history_frame = Frame(notebook)
 notebook.add(predict_frame, text="Predictions")
 notebook.add(history_frame, text="History")
 
-
-
-
-
-
 #creating the listbox in history_frame
 listbox = Listbox(history_frame, width=60, height=20,bg='#ffffe6',fg='#000080',font='georgia 12')
 listbox.pack(side=BOTTOM, fill=BOTH, expand=True)
@@ -200,7 +202,6 @@ listbox.pack(side=BOTTOM, fill=BOTH, expand=True)
 scrollbar = Scrollbar(listbox, orient=VERTICAL, command=listbox.yview,bg='#ffffe6')
 scrollbar.pack(side=RIGHT, fill=Y)
 listbox.config(yscrollcommand=scrollbar.set)
-
 
 # Initial population of the listbox with session history
 update_history_listbox()
@@ -218,15 +219,13 @@ new = PhotoImage(file='images/history_image.png')
 new_image = Label(history_frame, image=new)
 new_image.pack(side=TOP, fill=BOTH)
 
-
-
 # Label and entry for name input
 Label(predict_frame, text='Please insert your name here👇👇', font='Arial 12', bg=None).place(x=81, y=213)
 #creating a name entry box
 name_entry = Entry(predict_frame, width=20, font=('Poppins 15 bold'), justify=CENTER)
 name_entry.place(x=88, y=237)
 
-#binding the enter key to the maun function
+#binding the enter key to the main function
 name_entry.bind('<Return>', predict_gender) 
 
 #label to display recent history in history frame
