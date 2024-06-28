@@ -121,7 +121,7 @@ def show_history():
         
         #function for inserting information from the file to the list   
         def display_history():
-            listbox.delete(0, END)
+            listboxa.delete(0, END)
             try:
                 with open('history.json', 'r') as file:
                     for line in file:
