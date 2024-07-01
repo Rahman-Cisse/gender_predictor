@@ -123,6 +123,9 @@ def show_history():
         def clear_full_history():
             if askyesno(title="Clear History", message="Are you sure you want to clear your history?"):
                 clear_history()
+                update_history_listbox()
+                close_history_window()
+                notebook.select(predict_frame)
 
         def clear_history():
             try:

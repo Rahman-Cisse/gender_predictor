@@ -53,6 +53,7 @@ def clear_labels():
     bottom_image.config(image='')
 
 def update_labels(name, gender, probability):
+    stop_loading_animation()
     name_label.config(text='Name: ' + name.upper())
     gender_label.config(text='Gender: ' + gender.upper())
     probability_label.config(text='Accuracy: ' + str(probability) + '%')
