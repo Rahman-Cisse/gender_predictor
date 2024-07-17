@@ -7,8 +7,8 @@ class HistoryWindow:
         self.controller = controller
         self.history_window = Toplevel(root)
         self.history_window.title("Prediction History")
-        self.history_window.geometry("410x520")
-        self.history_window.resizable(False, False)
+        self.history_window.geometry("480x520")
+        #self.history_window.resizable(False, False)
         self.history_window.configure(bg='#E3CCB2')
 
         Label(self.history_window, text='ALL PREDICTIONS', font='Papyrus 17', bg='#E3CCB2', fg='#CB625F').pack()

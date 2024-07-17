@@ -2,7 +2,7 @@ import threading
 from tkinter import Tk
 from tkinter.messagebox import showerror, askyesno
 from model.model import Model
-from view.predict_view import MainWindow
+from view.main_window import MainWindow
 from view.history_window import HistoryWindow
 from datetime import datetime
 class Controller:

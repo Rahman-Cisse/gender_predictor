@@ -18,6 +18,7 @@ class Model:
                 for name, gender, probability, date_today in self.session_history:
                     json.dump({'name': name, 'gender': gender, 'probability': probability, 'date': date_today}, file)
                     file.write('\n')
+                    self.session_history=[]
         except Exception as e:
             showerror(title='Error', message=f'An error occurred while saving the history: {str(e)}')
 
