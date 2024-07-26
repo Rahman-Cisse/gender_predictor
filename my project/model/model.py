@@ -5,13 +5,14 @@ import requests
 from tkinter.messagebox import showerror
 
 class Model:
+    #initializing
     def __init__(self):
         self.session_history = []
-
+    #assigning the api that will be used for retreiving the gender from the internet
     def predict_gender(self, name):
         response = requests.get(f'https://api.genderize.io/?name={name}').json()
         return response
-
+    #main function for storing info from the internet
     def save_history(self):
         try:
             with open('model\history.json', 'a') as file:
@@ -21,7 +22,7 @@ class Model:
                     self.session_history=[]
         except Exception as e:
             showerror(title='Error', message=f'An error occurred while saving the history: {str(e)}')
-
+    #function that prepares stored info
     def load_history(self):
         history = []
         try:

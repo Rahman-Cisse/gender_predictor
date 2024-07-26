@@ -4,11 +4,12 @@ import json
 
 class HistoryWindow:
     def __init__(self, root, controller):
+        #creating the history window and all its features
         self.controller = controller
         self.history_window = Toplevel(root)
         self.history_window.title("Prediction History")
         self.history_window.geometry("480x520")
-        #self.history_window.resizable(False, False)
+        self.history_window.resizable(False, False)
         self.history_window.configure(bg='#E3CCB2')
 
         Label(self.history_window, text='ALL PREDICTIONS', font='Papyrus 17', bg='#E3CCB2', fg='#CB625F').pack()
@@ -26,11 +27,11 @@ class HistoryWindow:
         self.clear_button.pack(pady=5, side=RIGHT)
 
         self.history_window.protocol("WM_DELETE_WINDOW", self.close_history_window)
-
+    # to make sure only one history window is opened at a time
     def close_history_window(self):
         self.history_window.destroy()
         self.controller.is_running = False
-
+    #function responsible for displaying all the information in the listbox
     def display_history(self):
         self.listbox.delete(0, END)
         try:
@@ -42,7 +43,7 @@ class HistoryWindow:
             showerror(title='Error', message='No history file found.')
         except Exception as e:
             showerror(title='Error', message=f'An error occurred while loading the history: {str(e)}')
-
+    #function that cleares every info in the json file
     def clear_full_history(self):
         if askyesno(title="Clear History", message="Are you sure you want to clear your history?"):
             self.controller.clear_history()
